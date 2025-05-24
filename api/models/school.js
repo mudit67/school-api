@@ -1,7 +1,6 @@
 const { dbPool } = require("../configs/dbConfig");
 
 class School {
-  // Create schools table
   static async createTable() {
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS schools (
@@ -54,7 +53,6 @@ class School {
     }
   }
 
-  // Insert a new school
   static async create(schoolData) {
     const { name, address, latitude, longitude } = schoolData;
     const insertQuery = `
@@ -114,7 +112,6 @@ class School {
     }
   }
 
-  // Get school by ID
   static async findById(id) {
     const selectQuery = "SELECT * FROM schools WHERE id = ?";
 
@@ -122,7 +119,7 @@ class School {
       const [rows] = await dbPool.execute(selectQuery, [id]);
       return rows[0] || null;
     } catch (error) {
-      console.error("❌ Error fetching school:", error.message);
+      console.error("Error fetching school:", error.message);
       throw error;
     }
   }

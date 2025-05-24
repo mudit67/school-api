@@ -5,10 +5,7 @@ const School = require("./models/school");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(express.json());
-
-// API Routes
 
 app.get("/", (req, res) => {
   res.send(
@@ -16,6 +13,7 @@ app.get("/", (req, res) => {
     `
   );
 });
+
 app.get("/status", async (req, res) => {
   const dbConnected = await testConnection();
   res.json({
@@ -24,6 +22,7 @@ app.get("/status", async (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
 app.get("/api/schools", async (req, res) => {
   console.log("Fetching All Of the Schools.");
   try {
@@ -41,6 +40,7 @@ app.get("/api/schools", async (req, res) => {
     });
   }
 });
+
 app.use("/api/delete-schools", async (req, res) => {
   try {
     const schools = await School.deleteData();
@@ -55,6 +55,7 @@ app.use("/api/delete-schools", async (req, res) => {
     });
   }
 });
+
 app.get("/api/closest-school", async (req, res) => {
   try {
     const { latitude, longitude } = req.body;
@@ -120,7 +121,6 @@ app.post("/api/add-school", async (req, res) => {
 
 async function startServer() {
   try {
-    // Test database connection
     const dbConnected = await testConnection();
     if (!dbConnected) {
       console.error("Cannot start server: Database connection failed");
