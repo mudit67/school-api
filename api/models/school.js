@@ -70,16 +70,16 @@ class School {
       let [rows] = await dbPool.execute(selectQuery);
       if (rows && rows.length > 1) {
         rows.sort((a, b) => {
-          let dist1 = Math.sqrt(
+          const dist1 = Math.sqrt(
             Math.pow(a.latitude - latitude, 2) +
               Math.pow(a.longitude - longitude, 2)
           );
-          let dist2 = Math.sqrt(
+          const dist2 = Math.sqrt(
             Math.pow(b.latitude - latitude, 2) +
               Math.pow(b.longitude - longitude, 2)
           );
-          console.log(dist1, dist2, a, b, longitude, latitude);
-          console.log("\n\n");
+          // console.log(dist1, dist2, a, b, longitude, latitude);
+          // console.log("\n\n");
           return dist1 - dist2;
         });
       }
