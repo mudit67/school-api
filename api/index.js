@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send(
-    `Go to <a href="api/schools"">/api/schools</a> for a list of all schools
+    `Go to /api/schools for a list of all schools
     `
   );
 });

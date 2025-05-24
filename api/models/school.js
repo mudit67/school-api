@@ -77,23 +77,22 @@ class School {
     }
   }
 
-  // Get all schools
-  static async findClosetSchool(longitude, latitude) {
+  static async findClosetSchool(latitude, longitude) {
     const selectQuery = "SELECT * FROM schools";
     try {
       let [rows] = await dbPool.execute(selectQuery);
       if (rows && rows.length > 1) {
         rows.sort((a, b) => {
           const dist1 = Math.sqrt(
-            Math.pow(a.latitude - latitude, 2) +
-              Math.pow(a.longitude - longitude, 2)
+            Math.pow(Number(a.latitude) - Number(latitude), 2) +
+              Math.pow(Number(a.longitude) - Number(longitude), 2)
           );
           const dist2 = Math.sqrt(
-            Math.pow(b.latitude - latitude, 2) +
-              Math.pow(b.longitude - longitude, 2)
+            Math.pow(Number(b.latitude) - Number(latitude), 2) +
+              Math.pow(Number(b.longitude) - Number(longitude), 2)
           );
-          // console.log(dist1, dist2, a, b, longitude, latitude);
-          // console.log("\n\n");
+          console.log(dist1, dist2, a, b, longitude, latitude);
+          console.log("\n\n");
           return dist1 - dist2;
         });
       }
