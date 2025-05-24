@@ -9,6 +9,13 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 // API Routes
+
+app.get("/", (req, res) => {
+  res.send(
+    `Go to <a href="api/schools"">/api/schools</a> for a list of all schools
+    `
+  );
+});
 app.get("/status", async (req, res) => {
   const dbConnected = await testConnection();
   res.json({
@@ -25,6 +32,20 @@ app.get("/api/schools", async (req, res) => {
       success: true,
       count: schools.length,
       data: schools,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching schools",
+      error: error.message,
+    });
+  }
+});
+app.use("/api/delete-schools", async (req, res) => {
+  try {
+    const schools = await School.deleteData();
+    res.json({
+      success: true,
     });
   } catch (error) {
     res.status(500).json({
@@ -106,7 +127,7 @@ async function startServer() {
       process.exit(1);
     }
 
-    await School.deleteTable();
+    // await School.deleteTable();
 
     await School.createTable();
 

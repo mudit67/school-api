@@ -24,15 +24,29 @@ class School {
     }
   }
 
-  // Create schools table
   static async deleteTable() {
-    const createTableQuery = `
+    const query = `
       DROP TABLE IF EXISTS schools
     `;
 
     try {
-      await dbPool.execute(createTableQuery);
+      await dbPool.execute(query);
       console.log("Schools table deleted successfully");
+      return true;
+    } catch (error) {
+      console.error("Error deleting schools table:", error.message);
+      throw error;
+    }
+  }
+  static async deleteData() {
+    console.log("Deleting Data.");
+    const query = `
+      DELETE FROM schools
+    `;
+
+    try {
+      await dbPool.execute(query);
+      console.log("Schools data deleted successfully");
       return true;
     } catch (error) {
       console.error("Error deleting schools table:", error.message);
