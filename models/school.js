@@ -64,10 +64,10 @@ class School {
   }
 
   // Get all schools
-  static async findAll() {
+  static async findClosetSchool(longitude, latitude) {
     const selectQuery = "SELECT * FROM schools";
     try {
-      const [rows] = await dbPool.execute(selectQuery);
+      let [rows] = await dbPool.execute(selectQuery);
       if (rows && rows.length > 1) {
         rows.sort((a, b) => {
           let dist1 = Math.sqrt(
@@ -78,6 +78,8 @@ class School {
             Math.pow(b.latitude - latitude, 2) +
               Math.pow(b.longitude - longitude, 2)
           );
+          console.log(dist1, dist2, a, b, longitude, latitude);
+          console.log("\n\n");
           return dist1 - dist2;
         });
       }
@@ -87,7 +89,7 @@ class School {
       throw error;
     }
   }
-  static async findClosetSchool(longitude, latitude) {
+  static async findAll() {
     const selectQuery = "SELECT * FROM schools";
     try {
       const [rows] = await dbPool.execute(selectQuery);

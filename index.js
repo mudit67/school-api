@@ -18,6 +18,7 @@ app.get("/status", async (req, res) => {
   });
 });
 app.get("/api/schools", async (req, res) => {
+  console.log("Fetching All Of the Schools.");
   try {
     const schools = await School.findAll();
     res.json({
