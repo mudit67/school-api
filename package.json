@@ -4,7 +4,8 @@
   "description": "A rudimentary API to add and list schools using Nodejs and MySql",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/mudit67/school-api#readme",
   "dependencies": {
+    "express": "^5.1.0",
     "mysql2": "^3.14.1"
   },
   "devDependencies": {

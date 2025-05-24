@@ -1,4 +1,4 @@
-const { pool } = require("../config/database");
+const { dbPool } = require("../configs/dbConfig");
 
 class School {
   // Create schools table
@@ -10,15 +10,32 @@ class School {
         address VARCHAR(500) NOT NULL,
         latitude FLOAT NOT NULL,
         longitude FLOAT NOT NULL,
+        UNIQUE (latitude, longitude)
       )
     `;
 
     try {
-      await pool.execute(createTableQuery);
+      await dbPool.execute(createTableQuery);
       console.log("Schools table created successfully");
       return true;
     } catch (error) {
       console.error("Error creating schools table:", error.message);
+      throw error;
+    }
+  }
+
+  // Create schools table
+  static async deleteTable() {
+    const createTableQuery = `
+      DROP TABLE IF EXISTS schools
+    `;
+
+    try {
+      await dbPool.execute(createTableQuery);
+      console.log("Schools table deleted successfully");
+      return true;
+    } catch (error) {
+      console.error("Error deleting schools table:", error.message);
       throw error;
     }
   }
@@ -32,7 +49,7 @@ class School {
     `;
 
     try {
-      const [result] = await pool.execute(insertQuery, [
+      const [result] = await dbPool.execute(insertQuery, [
         name,
         address,
         latitude,
@@ -48,12 +65,49 @@ class School {
 
   // Get all schools
   static async findAll() {
-    const selectQuery = "SELECT * FROM schools ORDER BY created_at DESC";
+    const selectQuery = "SELECT * FROM schools";
     try {
-      const [rows] = await pool.execute(selectQuery);
+      const [rows] = await dbPool.execute(selectQuery);
+      if (rows && rows.length > 1) {
+        rows.sort((a, b) => {
+          let dist1 = Math.sqrt(
+            Math.pow(a.latitude - latitude, 2) +
+              Math.pow(a.longitude - longitude, 2)
+          );
+          let dist2 = Math.sqrt(
+            Math.pow(b.latitude - latitude, 2) +
+              Math.pow(b.longitude - longitude, 2)
+          );
+          return dist1 - dist2;
+        });
+      }
       return rows;
     } catch (error) {
       console.error("Error fetching schools:", error.message);
+      throw error;
+    }
+  }
+  static async findClosetSchool(longitude, latitude) {
+    const selectQuery = "SELECT * FROM schools";
+    try {
+      const [rows] = await dbPool.execute(selectQuery);
+
+      return rows;
+    } catch (error) {
+      console.error("Error fetching schools:", error.message);
+      throw error;
+    }
+  }
+
+  // Get school by ID
+  static async findById(id) {
+    const selectQuery = "SELECT * FROM schools WHERE id = ?";
+
+    try {
+      const [rows] = await dbPool.execute(selectQuery, [id]);
+      return rows[0] || null;
+    } catch (error) {
+      console.error("❌ Error fetching school:", error.message);
       throw error;
     }
   }
